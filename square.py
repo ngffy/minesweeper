@@ -12,14 +12,14 @@ class Square:
         self.is_questioned = False
 
         self.mines_touching = 0
-        self.coords = (x, y)
+        self.dimensions = pygame.Rect(x, y, self.size, self.size)
         self.set_img("png/Minesweeper_unopened_square.png")
 
     def draw_line(self):
         RED = (255,0,0)
-        top_left = self.coords
-        bottom_right = (self.coords[0]+self.size, self.coords[1]+self.size)
-        pygame.draw.line(self.surface, RED, top_left, bottom_right, 10)
+        topleft = self.dimensions.topleft
+        bottomright = self.dimensions.bottomright
+        pygame.draw.line(self.surface, RED, topleft, bottomright, 10)
 
     def update_img(self):
         if self.is_mine:
@@ -46,7 +46,7 @@ class Square:
     def set_img(self, img):
         self.img = pygame.image.load(img)
         self.img = pygame.transform.scale(self.img, (self.size, self.size))
-        self.surface.blit(self.img, self.coords)
+        self.surface.blit(self.img, self.dimensions.topleft)
 
     def reveal(self):
         if not self.is_flagged and not self.is_clicked:

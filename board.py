@@ -100,10 +100,9 @@ class Board:
         mousex, mousey = mousepos
         for row in self.squares:
             for s in row:
-                sx, sy = s.coords
-                too_far_right = sx+self.square_size < mousex
-                too_far_up = sy+self.square_size < mousey
-                too_far_down = sy > mousey
+                too_far_right = mousex > s.dimensions.right
+                too_far_up = mousey < s.dimensions.top
+                too_far_down = mousey > s.dimensions.bottom
                 if not (too_far_right or too_far_up or too_far_down):
                     return s
         return None
