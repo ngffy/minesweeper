@@ -31,15 +31,20 @@ class Board:
         # Font object for mine counter and timer
         self.game_font = pygame.font.Font('freesansbold.ttf', 48)
 
+        # Places the mine counter
+        self.mine_counter = self.game_font.render("99", True, (255,0,0))
+        self.counter_loc = self.mine_counter.get_rect()
+        self.counter_loc.bottomleft = self.square_grid.topleft
+
+        # Places the timer
+        self.timer = self.game_font.render("999", True, (255,0,0))
+        self.timer_loc = self.timer.get_rect()
+        self.timer_loc.bottomright = self.square_grid.topright
+
         self.start_time = 0
         self.curr_time = 0
 
     def update_mine_counter(self):
-        # Makes the mine counter the right size
-        self.mine_counter = self.game_font.render("99", True, (255,0,0))
-        self.counter_loc = self.mine_counter.get_rect()
-        self.counter_loc.bottomleft = self.coords
-
         # Makes the background of the counter black
         self.mine_counter.fill((0,0,0))
         self.surface.blit(self.mine_counter, self.counter_loc)
@@ -52,13 +57,7 @@ class Board:
         self.surface.blit(self.mine_counter, self.counter_loc)
 
     def update_timer(self):
-        top_of_grid = self.coords[1]
-        edge_of_board = self.coords[0] + self.square_size*self.size[1]
-
-        self.timer = self.game_font.render("999", True, (255,0,0))
-        self.timer_loc = self.timer.get_rect()
-        self.timer_loc.bottomright = (edge_of_board, top_of_grid)
-
+        # Makes the background of the timer black
         self.timer.fill((0,0,0))
         self.surface.blit(self.timer, self.timer_loc)
 
@@ -74,7 +73,6 @@ class Board:
 
         self.timer = self.game_font.render(time_elapsed, True, (255,0,0))
         self.surface.blit(self.timer, self.timer_loc)
-
 
     def check_for_win(self):
         only_mines_left = self.total_mines == self.unclicked_squares
