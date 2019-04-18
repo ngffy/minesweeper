@@ -17,11 +17,13 @@ class Board:
         self.unclicked_squares = size[0] * size[1]
         self.total_mines = round(.2*self.unclicked_squares)
 
+        len_x = self.square_size*size[1]
+        len_y = self.square_size*size[0]
+        self.square_grid = pygame.Rect(0, 50, len_x, len_y)
+
         # Makes a 2D list of Square objects
-        start_x = self.coords[0]
-        start_y = self.coords[1]
-        end_x = start_x + self.square_size*size[1]
-        end_y = start_y + self.square_size*size[0]
+        start_x, start_y = self.square_grid.topleft
+        end_x, end_y = self.square_grid.bottomright
         self.squares = [[Square(self, i, j)
             for i in range(start_x, end_x, self.square_size)]
             for j in range(start_y, end_y, self.square_size)] 
