@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 from square import Square
 
 class Board:
@@ -28,6 +29,9 @@ class Board:
         # Font object for mine counter and timer
         self.game_font = pygame.font.Font('freesansbold.ttf', 48)
 
+        self.start_time = 0
+        self.curr_time = 0
+
     def update_mine_counter(self):
         # Makes the mine counter the right size
         self.mine_counter = self.game_font.render("99", True, (255,0,0))
@@ -41,10 +45,34 @@ class Board:
         mines_left = str(self.total_mines - self.total_flags)
         if len(mines_left) == 1:
             mines_left = "0" + mines_left
+
         self.mine_counter = self.game_font.render(mines_left, True, (255,0,0))
-        self.counter_loc = self.mine_counter.get_rect()
-        self.counter_loc.bottomleft = self.coords
         self.surface.blit(self.mine_counter, self.counter_loc)
+
+    def update_timer(self):
+        top_of_grid = self.coords[1]
+        edge_of_board = self.coords[0] + self.square_size*self.size[1]
+
+        self.timer = self.game_font.render("999", True, (255,0,0))
+        self.timer_loc = self.timer.get_rect()
+        self.timer_loc.bottomright = (edge_of_board, top_of_grid)
+
+        self.timer.fill((0,0,0))
+        self.surface.blit(self.timer, self.timer_loc)
+
+        if self.game_started:
+            self.curr_time = time.time()
+            time_elapsed = str(round(self.curr_time - self.start_time))
+            time_elapsed = "0"*(3-len(time_elapsed)) + time_elapsed
+        else:
+            time_elapsed = "000"
+
+        if len(time_elapsed) > 3:
+            time_elapsed = "999"
+
+        self.timer = self.game_font.render(time_elapsed, True, (255,0,0))
+        self.surface.blit(self.timer, self.timer_loc)
+
 
     def check_for_win(self):
         only_mines_left = self.total_mines == self.unclicked_squares
@@ -87,6 +115,7 @@ class Board:
 
     # Places mines in such a way that the first space clicked will be a 0 space
     # Returns False if a mine was clicked, returns True otherwise
+    # Also starts timer
     def place_mines(self, mousepos):
         square = self.get_clicked_square(mousepos)
         if square is None:
@@ -104,6 +133,7 @@ class Board:
                 adj_squares = self.squares_adjacent_to(s)
                 total_adj_mines = sum([i.is_mine for i in adj_squares])
                 s.mines_touching = total_adj_mines
+        self.start_time = time.time()
         self.game_started = True
 
     def squares_adjacent_to(self, s):

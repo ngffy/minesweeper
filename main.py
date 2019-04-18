@@ -21,6 +21,7 @@ pygame.event.set_blocked(MOUSEMOTION)
 
 while True:
     board.update_mine_counter()
+    board.update_timer()
     board.check_for_win()
     pygame.display.update()
 
