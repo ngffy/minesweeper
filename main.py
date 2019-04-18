@@ -38,7 +38,6 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == MOUSEBUTTONUP and event.button == 1:
-            # FIXME: Need a check to make sure a square was actually clicked
             if not board.game_started:
                 board.place_mines(event.pos)
             board.left_click(event.pos)
