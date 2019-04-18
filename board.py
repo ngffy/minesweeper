@@ -11,6 +11,7 @@ class Board:
         self.game_won = False
         self.total_flags = 0
         self.coords = (0,50)
+        self.game_started = False
 
         self.unclicked_squares = size[0] * size[1]
         self.total_mines = round(.2*self.unclicked_squares)
@@ -89,7 +90,7 @@ class Board:
     def place_mines(self, mousepos):
         square = self.get_clicked_square(mousepos)
         if square is None:
-            return True
+            return
         adj_squares = self.squares_adjacent_to(square)
         free_spaces = self.unclicked_squares-self.total_mines-1-len(adj_squares)
         is_mine = ([True]*self.total_mines + [False]*free_spaces)
@@ -103,7 +104,7 @@ class Board:
                 adj_squares = self.squares_adjacent_to(s)
                 total_adj_mines = sum([i.is_mine for i in adj_squares])
                 s.mines_touching = total_adj_mines
-        return False
+        self.game_started = True
 
     def squares_adjacent_to(self, s):
         x, y = self.get_index(s)

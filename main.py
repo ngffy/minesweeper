@@ -19,7 +19,6 @@ board = Board((16, 31), 40, DISPLAYSURF)
 # Prevents mouse movement from counting as an event, reducing CPU usage
 pygame.event.set_blocked(MOUSEMOTION)
 
-first_left_click = True
 while True:
     board.update_mine_counter()
     board.check_for_win()
@@ -33,16 +32,14 @@ while True:
         print("You win")
         break
 
-    # Program waits here until a non-mouse movement event is read
-    event = pygame.event.wait()
-
-    if event.type == QUIT:
-        pygame.quit()
-        sys.exit()
-    elif event.type == MOUSEBUTTONUP and event.button == 1:
-        # FIXME: Need a check to make sure a square was actually clicked
-        if first_left_click:
-            first_left_click = board.place_mines(event.pos)
-        board.left_click(event.pos)
-    elif event.type == MOUSEBUTTONUP and event.button == 3:
-        board.right_click(event.pos)
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == MOUSEBUTTONUP and event.button == 1:
+            # FIXME: Need a check to make sure a square was actually clicked
+            if not board.game_started:
+                board.place_mines(event.pos)
+            board.left_click(event.pos)
+        elif event.type == MOUSEBUTTONUP and event.button == 3:
+            board.right_click(event.pos)
