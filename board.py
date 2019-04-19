@@ -4,7 +4,7 @@ import time
 from square import Square
 
 class Board:
-    def __init__(self, size, square_size, surface):
+    def __init__(self, size, mines, surface, square_size=40):
         self.surface = surface
         self.size = size
         self.square_size = square_size
@@ -15,7 +15,7 @@ class Board:
         self.game_started = False
 
         self.unclicked_squares = size[0] * size[1]
-        self.total_mines = round(.2*self.unclicked_squares)
+        self.total_mines = mines
 
         len_x = self.square_size*size[1]
         len_y = self.square_size*size[0]
