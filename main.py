@@ -57,6 +57,20 @@ def play_pressed(option_box):
     option_box.destroy()
     start_game(row_input, col_input, mine_input)
 
+    # These lines will not execute until the game is over
+    play_again_box = tkinter.Tk()
+    question = tkinter.Label(play_again_box, text="Play again?")
+    question.pack(side=tkinter.TOP)
+
+    yes = tkinter.Button(play_again_box, text="Yes",
+            command=play_again_box.destroy)
+    yes.pack(side=tkinter.LEFT)
+
+    no = tkinter.Button(play_again_box, text="No", command=sys.exit)
+    no.pack(side=tkinter.RIGHT)
+
+    play_again_box.mainloop()
+
 def main():
     while True:
         option_box = tkinter.Tk()
@@ -92,20 +106,10 @@ def main():
                 command=lambda: play_pressed(option_box))
         start_button.pack()
 
+        # Makes the program end if option_box's x button is pressed
+        option_box.protocol("WM_DELETE_WINDOW", sys.exit)
+
         option_box.mainloop()
-
-        play_again_box = tkinter.Tk()
-        question = tkinter.Label(play_again_box, text="Play again?")
-        question.pack(side=tkinter.TOP)
-
-        yes = tkinter.Button(play_again_box, text="Yes",
-                command=play_again_box.destroy)
-        yes.pack(side=tkinter.LEFT)
-
-        no = tkinter.Button(play_again_box, text="No", command=sys.exit)
-        no.pack(side=tkinter.RIGHT)
-
-        play_again_box.mainloop()
 
 if __name__ == "__main__":
     main()
