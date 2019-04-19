@@ -44,9 +44,22 @@ def start_game(rows, cols, mines):
                 board.right_click(event.pos)
 
 def play_pressed(option_box):
-    row_input = int(option_box.children['!frame'].children['!spinbox'].get())
-    col_input = int(option_box.children['!frame2'].children['!spinbox'].get())
-    mine_input = int(option_box.children['!frame3'].children['!spinbox'].get())
+    try:
+        row_input = int(option_box.children['!frame'].children['!spinbox'].get())
+        col_input = int(option_box.children['!frame2'].children['!spinbox'].get())
+        mine_input = int(option_box.children['!frame3'].children['!spinbox'].get())
+    except ValueError:
+        messagebox.showerror("Input Error", "Please enter whole numbers!")
+        return
+
+    if not (5 <= row_input <= 99) or not (5 <= col_input <= 99):
+        messagebox.showerror("Input Error",
+                "Rows and columns must be between 5 and 99")
+        return
+
+    if not (1 <= mine_input):
+        messagebox.showerror("Input Error", "There must be at least one mine")
+        return
 
     max_mines = row_input * col_input - 1
     if mine_input > max_mines:
@@ -80,7 +93,7 @@ def main():
         row_frame.pack()
         row_label = tkinter.Label(row_frame, text="Rows:")
         row_label.pack(side=tkinter.LEFT)
-        rows = tkinter.Spinbox(row_frame, from_=1, to=99, width=2)
+        rows = tkinter.Spinbox(row_frame, from_=5, to=99, width=2)
         rows.pack(side=tkinter.LEFT)
 
         # Sets up column number input
@@ -88,7 +101,7 @@ def main():
         col_frame.pack()
         col_label = tkinter.Label(col_frame, text="Columns:")
         col_label.pack(side=tkinter.LEFT)
-        cols = tkinter.Spinbox(col_frame, from_=1, to=99, width=2)
+        cols = tkinter.Spinbox(col_frame, from_=5, to=99, width=2)
         cols.pack(side=tkinter.LEFT)
 
         # Sets up mine number input
