@@ -51,30 +51,30 @@ def start_game(rows, cols, mines):
 
 def play_pressed(option_box):
     try:
-        row_input = int(option_box.children['!frame'].children['!spinbox'].get())
-        col_input = int(option_box.children['!frame2'].children['!spinbox'].get())
-        mine_input = int(option_box.children['!frame3'].children['!spinbox'].get())
+        rows = int(option_box.children['!frame'].children['!spinbox'].get())
+        cols = int(option_box.children['!frame2'].children['!spinbox'].get())
+        mines = int(option_box.children['!frame3'].children['!spinbox'].get())
     except ValueError:
         messagebox.showerror("Input Error", "Please enter whole numbers!")
         return
 
-    if not (5 <= row_input <= 99) or not (5 <= col_input <= 99):
+    if not (5 <= rows <= 99) or not (5 <= cols <= 99):
         messagebox.showerror("Input Error",
                 "Rows and columns must be between 5 and 99")
         return
 
-    if not (1 <= mine_input):
+    if not (1 <= mines):
         messagebox.showerror("Input Error", "There must be at least one mine")
         return
 
-    max_mines = row_input * col_input - 1
-    if mine_input > max_mines:
+    max_mines = rows * cols - 1
+    if mines > max_mines:
         messagebox.showerror("Input Error",
                 "Board is too small for this many mines!")
         return
 
     option_box.destroy()
-    start_game(row_input, col_input, mine_input)
+    start_game(rows, cols, mines)
 
     # These lines will not execute until the game is over
     play_again_box = tkinter.Tk()
