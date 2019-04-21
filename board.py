@@ -11,7 +11,6 @@ class Board:
         self.game_lost = False
         self.game_won = False
         self.total_flags = 0
-        self.coords = (0,50)
         self.game_started = False
 
         self.unclicked_squares = size[0] * size[1]
