@@ -10,6 +10,7 @@ from board import Board
 
 def start_game(rows, cols, mines):
     pygame.init()
+
     # Pygame/ALSA has a bug that results in high CPU usage. This line reduces
     # the CPU usage
     pygame.mixer.quit()
@@ -23,25 +24,30 @@ def start_game(rows, cols, mines):
     # Prevents mouse movement from counting as an event, reducing CPU usage
     pygame.event.set_blocked(MOUSEMOTION)
 
+    # Creates an event that will cause the board timer to update every 100ms
+    UPDATETIMER = pygame.USEREVENT + 1
+    pygame.time.set_timer(UPDATETIMER, 100)
+
     while True:
         board.update_mine_counter()
-        board.update_timer()
         board.check_for_win()
         pygame.display.update()
 
         if board.game_lost or board.game_won:
             break
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == MOUSEBUTTONUP and event.button == 1:
-                if not board.game_started:
-                    board.place_mines(event.pos)
-                board.left_click(event.pos)
-            elif event.type == MOUSEBUTTONUP and event.button == 3:
-                board.right_click(event.pos)
+        event = pygame.event.wait()
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == UPDATETIMER:
+            board.update_timer()
+        elif event.type == MOUSEBUTTONUP and event.button == 1:
+            if not board.game_started:
+                board.place_mines(event.pos)
+            board.left_click(event.pos)
+        elif event.type == MOUSEBUTTONUP and event.button == 3:
+            board.right_click(event.pos)
 
 def play_pressed(option_box):
     try:
