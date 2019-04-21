@@ -113,7 +113,6 @@ class Board:
                 return (self.squares.index(row), row.index(s))
 
     # Places mines in such a way that the first space clicked will be a 0 space
-    # Returns False if a mine was clicked, returns True otherwise
     # Also starts timer
     def place_mines(self, mousepos):
         square = self.get_clicked_square(mousepos)
