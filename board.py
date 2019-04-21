@@ -32,7 +32,7 @@ class Board:
         self.game_font = pygame.font.Font('freesansbold.ttf', 48)
 
         # Places the mine counter
-        self.mine_counter = self.game_font.render("99", True, (255,0,0))
+        self.mine_counter = self.game_font.render(str(mines), True, (255,0,0))
         self.counter_loc = self.mine_counter.get_rect()
         self.counter_loc.bottomleft = self.square_grid.topleft
 
@@ -50,8 +50,10 @@ class Board:
         self.surface.blit(self.mine_counter, self.counter_loc)
 
         mines_left = str(self.total_mines - self.total_flags)
-        if len(mines_left) == 1:
-            mines_left = "0" + mines_left
+
+        # Pads with zeroes
+        max_digits = len(str(self.total_mines))
+        mines_left = "0"*(max_digits-len(mines_left)) + mines_left
 
         self.mine_counter = self.game_font.render(mines_left, True, (255,0,0))
         self.surface.blit(self.mine_counter, self.counter_loc)
