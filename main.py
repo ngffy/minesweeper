@@ -113,7 +113,6 @@ def main():
         cols.pack(side=tkinter.LEFT)
 
         # Sets up mine number input
-        # TODO: Set default number of mines (20% of board)
         mine_frame = tkinter.Frame(option_box)
         mine_frame.pack()
         mine_label = tkinter.Label(mine_frame, text="Mines:")
