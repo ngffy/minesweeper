@@ -67,7 +67,9 @@ def play_pressed(option_box):
         messagebox.showerror("Input Error", "There must be at least one mine")
         return
 
-    max_mines = rows * cols - 1
+    # 9 is subtracted because the player's first click will clear a minimum of
+    # 9 spaces if not clicked on the board edge
+    max_mines = rows * cols - 9
     if mines > max_mines:
         messagebox.showerror("Input Error",
                 "Board is too small for this many mines!")
