@@ -8,7 +8,7 @@ from pygame.locals import *
 from square import Square
 from board import Board
 
-def start_game(rows, cols, mines):
+def play_game(rows, cols, mines):
     pygame.init()
 
     # Pygame/ALSA has a bug that results in high CPU usage. This line reduces
@@ -76,7 +76,7 @@ def play_pressed(option_box):
         return
 
     option_box.destroy()
-    start_game(rows, cols, mines)
+    play_game(rows, cols, mines)
 
     # These lines will not execute until the game is over
     play_again_box = tkinter.Tk()
