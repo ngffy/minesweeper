@@ -8,7 +8,7 @@ from pygame.locals import *
 from square import Square
 from board import Board
 
-def play_game(rows, cols, mines):
+def make_board(rows, cols, mines):
     pygame.init()
 
     # Pygame/ALSA has a bug that results in high CPU usage. This line reduces
@@ -19,10 +19,13 @@ def play_game(rows, cols, mines):
     DISPLAYSURF.fill((185,185,185))
     pygame.display.set_caption("Minesweeper")
 
-    board = Board((rows, cols), mines, DISPLAYSURF)
-
     # Prevents mouse movement from counting as an event, reducing CPU usage
     pygame.event.set_blocked(MOUSEMOTION)
+
+    return Board((rows, cols), mines, DISPLAYSURF)
+
+def play_game(rows, cols, mines):
+    board = make_board(rows, cols, mines)
 
     # Creates an event that will cause the board timer to update every 100ms
     UPDATETIMER = pygame.USEREVENT + 1
@@ -73,7 +76,7 @@ def ask_to_play_again():
     question = tkinter.Label(play_again_box, text="Play again?")
     question.pack(side=tkinter.TOP)
 
-    # Yes will destroy this Tk box and consequently reoption the option_box
+    # Yes will destroy this Tk box and consequently reopen the option_box
     yes = tkinter.Button(play_again_box, text="Yes",
             command=play_again_box.destroy)
     yes.pack(side=tkinter.LEFT)
@@ -93,41 +96,27 @@ def play_pressed(option_box):
         messagebox.showerror("Input Error", "Please enter whole numbers!")
         return
 
-    if not inputs_are_valid(rows, cols, mines):
-        return
+    if inputs_are_valid(rows, cols, mines):
+        option_box.destroy()
+        play_game(rows, cols, mines)
 
-    option_box.destroy()
-    play_game(rows, cols, mines)
+        ask_to_play_again()
 
-    ask_to_play_again()
+def add_option_for(var, lower, upper, window):
+    frame = tkinter.Frame(window)
+    frame.pack()
+    label = tkinter.Label(frame, text=var + ":")
+    label.pack(side=tkinter.LEFT)
+    val = tkinter.Spinbox(frame, from_=lower, to=upper, width=len(str(upper)))
+    val.pack(side=tkinter.LEFT)
 
 def main():
     while True:
         option_box = tkinter.Tk()
 
-        # Sets up row number input
-        row_frame = tkinter.Frame(option_box)
-        row_frame.pack()
-        row_label = tkinter.Label(row_frame, text="Rows:")
-        row_label.pack(side=tkinter.LEFT)
-        rows = tkinter.Spinbox(row_frame, from_=5, to=99, width=2)
-        rows.pack(side=tkinter.LEFT)
-
-        # Sets up column number input
-        col_frame = tkinter.Frame(option_box)
-        col_frame.pack()
-        col_label = tkinter.Label(col_frame, text="Columns:")
-        col_label.pack(side=tkinter.LEFT)
-        cols = tkinter.Spinbox(col_frame, from_=5, to=99, width=2)
-        cols.pack(side=tkinter.LEFT)
-
-        # Sets up mine number input
-        mine_frame = tkinter.Frame(option_box)
-        mine_frame.pack()
-        mine_label = tkinter.Label(mine_frame, text="Mines:")
-        mine_label.pack(side=tkinter.LEFT)
-        mines = tkinter.Spinbox(mine_frame, from_=0, to=9800, width=4)
-        mines.pack(side=tkinter.LEFT)
+        add_option_for("Rows", 5, 99, option_box)
+        add_option_for("Columns", 5, 99, option_box)
+        add_option_for("Mines", 1, 9801, option_box)
 
         # The lambda is so play_pressed(option_box) is not immediately executed
         # Otherwise the window will close early
