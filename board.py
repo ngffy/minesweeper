@@ -137,12 +137,12 @@ class Board:
         self.game_started = True
 
     def squares_adjacent_to(self, s):
-        x, y = self.get_index(s)
-        adj_indices = [(x-1,y-1), (x,y-1), (x+1,y-1),
-                (x-1,y), (x+1,y),
-                (x+1,y+1), (x,y+1), (x-1,y+1)]
-        adj_squares = [self.squares[i[0]][i[1]] for i in adj_indices 
-            if 0 <= i[0] < self.size[0] and 0 <= i[1] < self.size[1]]
+        i, j = self.get_index(s)
+        adj_indices = [(i-1,j-1), (i,j-1), (i+1,j-1),
+                (i-1,j), (i+1,j),
+                (i-1,j+1), (i,j+1), (i+1,j+1)]
+        adj_squares = [self.squares[i][j] for i, j in adj_indices
+            if 0 <= i < self.size[0] and 0 <= j < self.size[1]]
         return adj_squares
 
     def open(self, s):
