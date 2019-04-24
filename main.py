@@ -48,6 +48,42 @@ def play_game(rows, cols, mines):
         elif event.type == MOUSEBUTTONUP and event.button == 3:
             board.right_click(event.pos)
 
+def inputs_are_valid(rows, cols, mines):
+    if not (5 <= rows <= 99) or not (5 <= cols <= 99):
+        messagebox.showerror("Input Error",
+                "Rows and columns must be between 5 and 99")
+        return False
+
+    if not (1 <= mines):
+        messagebox.showerror("Input Error", "There must be at least one mine")
+        return False
+
+    # 9 is subtracted because the player's first click will clear a minimum of
+    # 9 spaces if not clicked on the board edge
+    max_mines = rows * cols - 9
+    if mines > max_mines:
+        messagebox.showerror("Input Error",
+                "Board is too small for this many mines!")
+        return False
+
+    return True
+
+def ask_to_play_again():
+    play_again_box = tkinter.Tk()
+    question = tkinter.Label(play_again_box, text="Play again?")
+    question.pack(side=tkinter.TOP)
+
+    # Yes will destroy this Tk box and consequently reoption the option_box
+    yes = tkinter.Button(play_again_box, text="Yes",
+            command=play_again_box.destroy)
+    yes.pack(side=tkinter.LEFT)
+
+    # No will end the program
+    no = tkinter.Button(play_again_box, text="No", command=sys.exit)
+    no.pack(side=tkinter.RIGHT)
+
+    play_again_box.mainloop()
+
 def play_pressed(option_box):
     try:
         rows = int(option_box.children['!frame'].children['!spinbox'].get())
@@ -57,39 +93,13 @@ def play_pressed(option_box):
         messagebox.showerror("Input Error", "Please enter whole numbers!")
         return
 
-    if not (5 <= rows <= 99) or not (5 <= cols <= 99):
-        messagebox.showerror("Input Error",
-                "Rows and columns must be between 5 and 99")
-        return
-
-    if not (1 <= mines):
-        messagebox.showerror("Input Error", "There must be at least one mine")
-        return
-
-    # 9 is subtracted because the player's first click will clear a minimum of
-    # 9 spaces if not clicked on the board edge
-    max_mines = rows * cols - 9
-    if mines > max_mines:
-        messagebox.showerror("Input Error",
-                "Board is too small for this many mines!")
+    if not inputs_are_valid(rows, cols, mines):
         return
 
     option_box.destroy()
     play_game(rows, cols, mines)
 
-    # These lines will not execute until the game is over
-    play_again_box = tkinter.Tk()
-    question = tkinter.Label(play_again_box, text="Play again?")
-    question.pack(side=tkinter.TOP)
-
-    yes = tkinter.Button(play_again_box, text="Yes",
-            command=play_again_box.destroy)
-    yes.pack(side=tkinter.LEFT)
-
-    no = tkinter.Button(play_again_box, text="No", command=sys.exit)
-    no.pack(side=tkinter.RIGHT)
-
-    play_again_box.mainloop()
+    ask_to_play_again()
 
 def main():
     while True:
