@@ -29,7 +29,6 @@ def play_game(rows, cols, mines):
     pygame.time.set_timer(UPDATETIMER, 100)
 
     while True:
-        board.update_mine_counter()
         board.check_for_win()
         pygame.display.update()
 

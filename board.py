@@ -34,6 +34,7 @@ class Board:
         self.mine_counter = self.game_font.render(str(mines), True, (255,0,0))
         self.counter_loc = self.mine_counter.get_rect()
         self.counter_loc.bottomleft = self.square_grid.topleft
+        self.update_mine_counter()
 
         # Places the timer
         self.timer = self.game_font.render("999", True, (255,0,0))
@@ -185,3 +186,4 @@ class Board:
             self.total_flags += 1
         elif square.is_questioned:
             self.total_flags -= 1
+        self.update_mine_counter()
